@@ -1,0 +1,1 @@
+INSERT INTO product_types (name, is_default) VALUES ('Standard Barbed Wire Roll', 1);
