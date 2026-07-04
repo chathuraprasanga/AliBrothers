@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom'
 const REPORTS = [
   { to: '/reports/production', label: 'Production Report', description: 'Rolls produced per day' },
   { to: '/reports/stock', label: 'Stock Report', description: 'Stock movements and balances' },
-  { to: '/reports/sales', label: 'Sales Report', description: 'Sales transactions by date' },
-  {
-    to: '/reports/customer-sales',
-    label: 'Customer-wise Sales Report',
-    description: 'Totals grouped by customer'
-  }
+  { to: '/reports/sales', label: 'Sales Report', description: 'Sales transactions by date' }
 ]
 
 export function ReportsHome(): React.JSX.Element {

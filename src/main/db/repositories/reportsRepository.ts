@@ -1,6 +1,5 @@
 import { getDb } from '../index'
 import type {
-  CustomerSalesReportResult,
   DateRangeFilter,
   ProductionReportResult,
   SalesReportFilter,
@@ -49,7 +48,9 @@ export function getStockReport(filters: DateRangeFilter): StockReportResult {
   })
 
   const totalIn = rows.filter((r) => r.quantity > 0).reduce((sum, r) => sum + r.quantity, 0)
-  const totalOut = rows.filter((r) => r.quantity < 0).reduce((sum, r) => sum + Math.abs(r.quantity), 0)
+  const totalOut = rows
+    .filter((r) => r.quantity < 0)
+    .reduce((sum, r) => sum + Math.abs(r.quantity), 0)
 
   return { openingBalance, rows, totalIn, totalOut, closingBalance: runningBalance }
 }
@@ -74,27 +75,15 @@ export function getSalesReport(filters: SalesReportFilter): SalesReportResult {
     customerId: number
   })[]
 
-  const rows = rawRows.map(({ customerId: _customerId, ...rest }) => rest)
+  const rows: SalesReportResult['rows'] = rawRows.map((row) => ({
+    saleDate: row.saleDate,
+    customerName: row.customerName,
+    customerPhone: row.customerPhone,
+    vehicleNumber: row.vehicleNumber,
+    rollCount: row.rollCount
+  }))
   const totalRolls = rows.reduce((sum, row) => sum + row.rollCount, 0)
   const uniqueCustomers = new Set(rawRows.map((row) => row.customerId)).size
 
   return { rows, totalRolls, transactionCount: rows.length, uniqueCustomers }
-}
-
-export function getCustomerSalesReport(filters: DateRangeFilter): CustomerSalesReportResult {
-  const db = getDb()
-  const rows = db
-    .prepare(
-      `SELECT c.id as customerId, c.name as customerName, c.phone as customerPhone,
-              COUNT(*) as transactionCount, SUM(s.roll_count) as totalRolls, MAX(s.sale_date) as lastSaleDate
-       FROM sales s
-       JOIN customers c ON c.id = s.customer_id
-       WHERE s.deleted_at IS NULL AND s.sale_date BETWEEN ? AND ?
-       GROUP BY c.id
-       ORDER BY totalRolls DESC`
-    )
-    .all(filters.dateFrom, filters.dateTo) as CustomerSalesReportResult['rows']
-
-  const grandTotalRolls = rows.reduce((sum, row) => sum + row.totalRolls, 0)
-  return { rows, grandTotalRolls, customerCount: rows.length }
 }

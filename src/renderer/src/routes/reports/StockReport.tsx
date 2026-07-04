@@ -2,8 +2,15 @@ import { useEffect, useState } from 'react'
 import { Group, Stack, Table, Text, Title } from '@mantine/core'
 import { DateRangeFilter } from '../../components/common/DateRangeFilter'
 import { PrintExportBar } from './components/PrintExportBar'
+import { PrintHeader } from './components/PrintHeader'
+import { BackToReports } from './components/BackToReports'
 import { api, defaultDateRange } from '../../lib/api'
-import type { DateRangeFilter as DateRangeFilterValue, StockReportResult } from '../../../../../shared/types'
+import { dash } from '../../lib/format'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle'
+import type {
+  DateRangeFilter as DateRangeFilterValue,
+  StockReportResult
+} from '../../../../../shared/types'
 
 export function StockReport(): React.JSX.Element {
   const [filters, setFilters] = useState<DateRangeFilterValue>(defaultDateRange())
@@ -13,14 +20,16 @@ export function StockReport(): React.JSX.Element {
     api.reports.stock(filters).then(setResult)
   }, [filters.dateFrom, filters.dateTo])
 
+  const reportTitle = `Stock Report (${filters.dateFrom} to ${filters.dateTo})`
+  useDocumentTitle(`AliBrothers - ${reportTitle}`)
+
   return (
     <Stack className="print-report">
       <Group justify="space-between" className="no-print">
         <Title order={2}>Stock Report</Title>
+        <BackToReports />
       </Group>
-      <Title order={4} className="print-only">
-        AliBrothers — Stock Report ({filters.dateFrom} to {filters.dateTo})
-      </Title>
+      <PrintHeader title={reportTitle} />
 
       <DateRangeFilter value={filters} onChange={setFilters} />
       <PrintExportBar />
@@ -40,10 +49,10 @@ export function StockReport(): React.JSX.Element {
             <Table.Tbody>
               {result.rows.map((row) => (
                 <Table.Tr key={row.id}>
-                  <Table.Td>{row.entryDate}</Table.Td>
-                  <Table.Td>{row.entryType}</Table.Td>
+                  <Table.Td>{dash(row.entryDate)}</Table.Td>
+                  <Table.Td>{dash(row.entryType)}</Table.Td>
                   <Table.Td>{row.quantity > 0 ? `+${row.quantity}` : row.quantity}</Table.Td>
-                  <Table.Td>{row.runningBalance}</Table.Td>
+                  <Table.Td>{dash(row.runningBalance)}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

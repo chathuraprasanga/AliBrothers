@@ -1,0 +1,2 @@
+node scripts/bump-version.cjs
+git add package.json

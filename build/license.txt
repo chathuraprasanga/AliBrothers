@@ -1,0 +1,30 @@
+AliBrothers Tracker
+Software Ownership & License Notice
+
+This software, "AliBrothers Tracker" (the "Software"), was developed by Chathura Prasanga
+("the Developer") at the personal request of Mr. U.M.T.S.L. Abeysinghe ("the Requester"),
+who engaged the Developer independently to support his work as a part-time associate. This
+is a private arrangement between the Developer and the Requester; there is no direct
+contractual relationship between the Developer and any company.
+
+The Software makes use of a company logo solely for the Requester's convenience and internal
+use. This does not constitute an endorsement, contractual obligation, or involvement by that
+company in the development, ownership, or licensing of the Software.
+
+All intellectual property rights in the Software are owned exclusively by the Developer. The
+Software is licensed for use solely by the Developer and the Requester. Commercial use,
+redistribution, sublicensing, or resale of the Software, in whole or in part, is strictly
+prohibited without the Developer's prior written consent.
+
+Neither the Developer nor the Requester shall be held liable for any use, misuse, or reliance
+on the Software by the company or any third party.
+
+By installing or using this Software, you acknowledge and agree to the terms above.
+
+Developer: Chathura Prasanga
+Phone: 077 925 0108 / 071 135 5531
+Email: chathuraprasanga98@gmail.com
+
+Requested By: U.M.T.S.L. Abeysinghe
+Phone: 074 101 4407
+Email: sahant383@gmail.com

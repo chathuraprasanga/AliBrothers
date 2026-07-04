@@ -2,8 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { Autocomplete, Button, Group, Stack, Table, Text, Title } from '@mantine/core'
 import { DateRangeFilter } from '../../components/common/DateRangeFilter'
 import { PrintExportBar } from './components/PrintExportBar'
+import { PrintHeader } from './components/PrintHeader'
+import { BackToReports } from './components/BackToReports'
 import { api, defaultDateRange } from '../../lib/api'
-import type { Customer, DateRangeFilter as DateRangeFilterValue, SalesReportResult } from '../../../../../shared/types'
+import { dash } from '../../lib/format'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle'
+import type {
+  Customer,
+  DateRangeFilter as DateRangeFilterValue,
+  SalesReportResult
+} from '../../../../../shared/types'
 
 export function SalesReport(): React.JSX.Element {
   const [filters, setFilters] = useState<DateRangeFilterValue>(defaultDateRange())
@@ -24,7 +32,9 @@ export function SalesReport(): React.JSX.Element {
       return
     }
     const results = await api.customers.search(query)
-    customersByLabel.current = new Map(results.map((c) => [`${c.name}${c.phone ? ` — ${c.phone}` : ''}`, c]))
+    customersByLabel.current = new Map(
+      results.map((c) => [`${c.name}${c.phone ? ` — ${c.phone}` : ''}`, c])
+    )
     setOptions([...customersByLabel.current.keys()])
   }
 
@@ -40,14 +50,18 @@ export function SalesReport(): React.JSX.Element {
     setCustomerId(undefined)
   }
 
+  const reportTitle = customerId
+    ? `Sales Report - ${customerQuery} (${filters.dateFrom} to ${filters.dateTo})`
+    : `Sales Report (${filters.dateFrom} to ${filters.dateTo})`
+  useDocumentTitle(`AliBrothers - ${reportTitle}`)
+
   return (
     <Stack className="print-report">
       <Group justify="space-between" className="no-print">
         <Title order={2}>Sales Report</Title>
+        <BackToReports />
       </Group>
-      <Title order={4} className="print-only">
-        AliBrothers — Sales Report ({filters.dateFrom} to {filters.dateTo})
-      </Title>
+      <PrintHeader title={reportTitle} />
 
       <Group className="no-print" align="flex-end">
         <DateRangeFilter value={filters} onChange={setFilters} />
@@ -72,7 +86,7 @@ export function SalesReport(): React.JSX.Element {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Date</Table.Th>
-                <Table.Th>Customer</Table.Th>
+                {!customerId && <Table.Th>Customer</Table.Th>}
                 <Table.Th>Phone</Table.Th>
                 <Table.Th>Vehicle</Table.Th>
                 <Table.Th>Roll count</Table.Th>
@@ -81,11 +95,11 @@ export function SalesReport(): React.JSX.Element {
             <Table.Tbody>
               {result.rows.map((row, index) => (
                 <Table.Tr key={index}>
-                  <Table.Td>{row.saleDate}</Table.Td>
-                  <Table.Td>{row.customerName}</Table.Td>
-                  <Table.Td>{row.customerPhone}</Table.Td>
-                  <Table.Td>{row.vehicleNumber}</Table.Td>
-                  <Table.Td>{row.rollCount}</Table.Td>
+                  <Table.Td>{dash(row.saleDate)}</Table.Td>
+                  {!customerId && <Table.Td>{dash(row.customerName)}</Table.Td>}
+                  <Table.Td>{dash(row.customerPhone)}</Table.Td>
+                  <Table.Td>{dash(row.vehicleNumber)}</Table.Td>
+                  <Table.Td>{dash(row.rollCount)}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

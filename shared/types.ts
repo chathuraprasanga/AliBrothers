@@ -17,7 +17,14 @@ export interface Customer {
   id: number
   name: string
   phone: string | null
+  address: string | null
   notes: string | null
+}
+
+export interface CustomerInput {
+  name: string
+  phone: string
+  address: string
 }
 
 export interface Sale {
@@ -26,6 +33,7 @@ export interface Sale {
   customerId: number
   customerName: string
   customerPhone: string | null
+  customerAddress: string | null
   vehicleNumber: string | null
   rollCount: number
   notes: string | null
@@ -35,9 +43,7 @@ export interface Sale {
 
 export interface SaleInput {
   saleDate: string
-  customerId?: number
-  customerName: string
-  customerPhone?: string | null
+  customerId: number
   vehicleNumber?: string | null
   rollCount: number
   notes?: string | null
@@ -117,21 +123,6 @@ export interface SalesReportResult {
   uniqueCustomers: number
 }
 
-export interface CustomerSalesReportRow {
-  customerId: number
-  customerName: string
-  customerPhone: string | null
-  transactionCount: number
-  totalRolls: number
-  lastSaleDate: string
-}
-
-export interface CustomerSalesReportResult {
-  rows: CustomerSalesReportRow[]
-  grandTotalRolls: number
-  customerCount: number
-}
-
 export const IPC = {
   productionList: 'production:list',
   productionCreate: 'production:create',
@@ -142,7 +133,14 @@ export const IPC = {
   salesCreate: 'sales:create',
   salesUpdate: 'sales:update',
   salesDelete: 'sales:delete',
+
   customersSearch: 'customers:search',
+  customersFindByPhone: 'customers:findByPhone',
+  customersGetById: 'customers:getById',
+  customersList: 'customers:list',
+  customersCreate: 'customers:create',
+  customersUpdate: 'customers:update',
+  customersDelete: 'customers:delete',
 
   stockCurrent: 'stock:current',
   stockLedger: 'stock:ledger',
@@ -150,6 +148,5 @@ export const IPC = {
 
   reportsProduction: 'reports:production',
   reportsStock: 'reports:stock',
-  reportsSales: 'reports:sales',
-  reportsCustomerSales: 'reports:customerSales'
+  reportsSales: 'reports:sales'
 } as const

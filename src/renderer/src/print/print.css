@@ -6,6 +6,21 @@
   .print-report {
     padding: 0;
   }
+
+  /* The AppShell layout uses a fixed-position header/navbar and a grid/scroll
+     container for the main content, which Chromium's print engine clips to a
+     single viewport instead of flowing across pages. With the header/navbar
+     hidden (.no-print above), reset the shell to a normal block flow so the
+     report content prints in full. */
+  .mantine-AppShell-root,
+  .mantine-AppShell-main {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 }
 
 @media screen {

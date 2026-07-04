@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { IPC } from '../../shared/types'
 import type {
+  CustomerInput,
   DateRangeFilter,
   ProductionEntryInput,
   SaleInput,
@@ -14,7 +15,8 @@ const api = {
   production: {
     list: (filters?: DateRangeFilter) => ipcRenderer.invoke(IPC.productionList, filters),
     create: (input: ProductionEntryInput) => ipcRenderer.invoke(IPC.productionCreate, input),
-    update: (id: number, input: ProductionEntryInput) => ipcRenderer.invoke(IPC.productionUpdate, id, input),
+    update: (id: number, input: ProductionEntryInput) =>
+      ipcRenderer.invoke(IPC.productionUpdate, id, input),
     delete: (id: number) => ipcRenderer.invoke(IPC.productionDelete, id)
   },
   sales: {
@@ -24,18 +26,25 @@ const api = {
     delete: (id: number) => ipcRenderer.invoke(IPC.salesDelete, id)
   },
   customers: {
-    search: (query: string) => ipcRenderer.invoke(IPC.customersSearch, query)
+    search: (query: string) => ipcRenderer.invoke(IPC.customersSearch, query),
+    findByPhone: (phone: string) => ipcRenderer.invoke(IPC.customersFindByPhone, phone),
+    get: (id: number) => ipcRenderer.invoke(IPC.customersGetById, id),
+    list: () => ipcRenderer.invoke(IPC.customersList),
+    create: (input: CustomerInput) => ipcRenderer.invoke(IPC.customersCreate, input),
+    update: (id: number, input: CustomerInput) =>
+      ipcRenderer.invoke(IPC.customersUpdate, id, input),
+    delete: (id: number) => ipcRenderer.invoke(IPC.customersDelete, id)
   },
   stock: {
     current: () => ipcRenderer.invoke(IPC.stockCurrent),
     ledger: (filters?: DateRangeFilter) => ipcRenderer.invoke(IPC.stockLedger, filters),
-    addAdjustment: (input: StockAdjustmentInput) => ipcRenderer.invoke(IPC.stockAddAdjustment, input)
+    addAdjustment: (input: StockAdjustmentInput) =>
+      ipcRenderer.invoke(IPC.stockAddAdjustment, input)
   },
   reports: {
     production: (filters: DateRangeFilter) => ipcRenderer.invoke(IPC.reportsProduction, filters),
     stock: (filters: DateRangeFilter) => ipcRenderer.invoke(IPC.reportsStock, filters),
-    sales: (filters: SalesReportFilter) => ipcRenderer.invoke(IPC.reportsSales, filters),
-    customerSales: (filters: DateRangeFilter) => ipcRenderer.invoke(IPC.reportsCustomerSales, filters)
+    sales: (filters: SalesReportFilter) => ipcRenderer.invoke(IPC.reportsSales, filters)
   }
 }
 

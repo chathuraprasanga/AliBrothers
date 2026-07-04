@@ -1,6 +1,6 @@
 {
   "name": "alibrothers-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AliBrothers production, sales, and stock tracker",
   "main": "./out/main/index.js",
   "author": "AliBrothers",
@@ -23,7 +23,8 @@
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac"
+    "build:mac": "electron-vite build && electron-builder --mac",
+    "prepare": "husky"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -33,6 +34,7 @@
     "@mantine/form": "^9.4.1",
     "@mantine/hooks": "^9.4.1",
     "@mantine/notifications": "^9.4.1",
+    "@tabler/icons-react": "^3.44.0",
     "better-sqlite3": "^12.11.1",
     "dayjs": "^1.11.21",
     "react-router-dom": "^7.18.1"
@@ -52,6 +54,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

@@ -1,9 +1,11 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { getDb } from './db'
 import { registerIpcHandlers } from './ipc/registerIpcHandlers'
+
+app.setName('AliBrothers')
 
 function createWindow(): void {
   // Create the browser window.
@@ -12,7 +14,8 @@ function createWindow(): void {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    title: 'AliBrothers',
+    icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -42,7 +45,14 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.alibrothers.tracker')
+
+  // Dev mode runs the unpackaged Electron binary, so the dock icon defaults to
+  // Electron's own icon unless overridden here. Packaged builds get the icon
+  // from electron-builder.yml/build/icon.icns instead.
+  if (process.platform === 'darwin' && is.dev) {
+    app.dock?.setIcon(nativeImage.createFromPath(icon))
+  }
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
